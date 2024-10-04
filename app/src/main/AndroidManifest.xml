@@ -15,6 +15,9 @@
         android:theme="@style/Theme.FirebaseAuth"
         tools:targetApi="31">
         <activity
+            android:name=".CovidVaccine"
+            android:exported="false" />
+        <activity
             android:name=".Home"
             android:exported="false" />
         <activity

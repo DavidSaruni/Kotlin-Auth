@@ -10,6 +10,7 @@ import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
+    // Initialize card views
     private lateinit var cardHome: CardView
     private lateinit var cardChat: CardView
     private lateinit var cardProfile: CardView
@@ -28,8 +29,9 @@ class MainActivity : AppCompatActivity() {
         cardSettings = findViewById(R.id.cardSettings)
         cardLogout = findViewById(R.id.cardLogout)
 
-        cardHome.setOnClickListener{
-            showToast("Home Clicked!")
+        cardHome.setOnClickListener {
+            val intent = Intent(this, Home::class.java)
+            startActivity(intent)
         }
         cardChat.setOnClickListener{
             showToast("Messages Clicked!")
