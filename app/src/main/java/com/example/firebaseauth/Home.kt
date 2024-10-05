@@ -1,5 +1,6 @@
 package com.example.firebaseauth
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -27,5 +28,10 @@ class Home : AppCompatActivity() {
         cardSearchPatient = findViewById(R.id.cardSearchPatient)
         cardViewPatients = findViewById(R.id.cardViewPatients)
         cardVaccination = findViewById(R.id.cardVaccination)
+
+        cardVaccination.setOnClickListener {
+            val intent = Intent(this, CovidVaccine::class.java)
+            startActivity(intent)
+        }
     }
 }
