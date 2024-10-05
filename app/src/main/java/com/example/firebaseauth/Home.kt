@@ -33,5 +33,10 @@ class Home : AppCompatActivity() {
             val intent = Intent(this, CovidVaccine::class.java)
             startActivity(intent)
         }
+
+        cardRegPatient.setOnClickListener {
+            val intent = Intent(this, RegisterPatient::class.java)
+            startActivity(intent)
+        }
     }
 }
