@@ -7,11 +7,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.commit
+import androidx.lifecycle.lifecycleScope
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.context.FhirVersionEnum
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.google.android.fhir.datacapture.mapping.ResourceMapper
+import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.Questionnaire
 
 class RegisterPatient : AppCompatActivity() {
+
+    private var questionnaireJsonString: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -23,14 +30,14 @@ class RegisterPatient : AppCompatActivity() {
         }
 
         // Configure a QuestionnaireFragment
-        val questionnaireJsonString = getStringFromAssets("ANCquestionnaire.json")
+        questionnaireJsonString = getStringFromAssets("ANCquestionnaire.json")
 
         if (savedInstanceState == null && questionnaireJsonString != null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
                 add(
                     R.id.fragment_container_view,
-                    QuestionnaireFragment.builder().setQuestionnaire(questionnaireJsonString).build()
+                    QuestionnaireFragment.builder().setQuestionnaire(questionnaireJsonString!!).build()
                 )
             }
         } else {
@@ -97,6 +104,18 @@ class RegisterPatient : AppCompatActivity() {
 
             // Optionally, save the response or send it to a server
             saveQuestionnaireResponse(questionnaireResponseString)
+
+            lifecycleScope.launch {
+                try {
+                    val questionnaire =
+                        jsonParser.parseResource(questionnaireJsonString) as Questionnaire
+                    val bundle = ResourceMapper.extract(questionnaire, questionnaireResponse)
+                    Log.d("extraction result", jsonParser.encodeResourceToString(bundle))
+                } catch (e: Exception){
+                    Log.e("submitQuestionnaire", "Failed to extract FHIR resources", e)
+                }
+            }
+
         } else {
             Log.e("submitQuestionnaire", "QuestionnaireFragment not found or is null")
         }
