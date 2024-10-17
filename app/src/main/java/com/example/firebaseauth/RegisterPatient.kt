@@ -30,7 +30,7 @@ class RegisterPatient : AppCompatActivity() {
         }
 
         // Configure a QuestionnaireFragment
-        questionnaireJsonString = getStringFromAssets("ANCquestionnaire.json")
+        questionnaireJsonString = getStringFromAssets("new-patient-registration.json")
 
         if (savedInstanceState == null && questionnaireJsonString != null) {
             supportFragmentManager.commit {
@@ -111,6 +111,15 @@ class RegisterPatient : AppCompatActivity() {
                         jsonParser.parseResource(questionnaireJsonString) as Questionnaire
                     val bundle = ResourceMapper.extract(questionnaire, questionnaireResponse)
                     Log.d("extraction result", jsonParser.encodeResourceToString(bundle))
+                    // check bundle length
+                    // with try catch block
+                    try {
+                        val bundleLength = bundle.entry.size
+                        Log.d("bundleLength", bundleLength.toString())
+                    } catch (e: Exception) {
+                        Log.e("bundleLength", "Failed to get bundle length", e)
+                    }
+
                 } catch (e: Exception){
                     Log.e("submitQuestionnaire", "Failed to extract FHIR resources", e)
                 }
